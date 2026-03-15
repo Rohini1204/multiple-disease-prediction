@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+ <title>Thyroid Prediction</title>
+
+ <link rel="icon" type="image/png"
+      href="{{ url_for('static', filename='favicon.png') }}">
+
+ <link rel="stylesheet"
+  href="{{ url_for('static', filename='common.css') }}">
+
+ <link rel="stylesheet"
+  href="{{ url_for('static', filename='thyroid.css') }}">
+
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="sidebar">
+
+ <h2>🩺 Healthcare AI</h2>
+
+ <button onclick="location.href='/'">🏠 Home</button>
+ <button onclick="location.href='/diabetes'">🩸 Diabetes</button>
+ <button onclick="location.href='/heart'">❤️ Heart</button>
+ <button onclick="location.href='/parkinsons'">🧠 Parkinson’s</button>
+ <button onclick="location.href='/PCOS'">🌸 PCOS</button>
+ <button onclick="location.href='/kidney'">🧪 Kidney</button>
+ <button onclick="location.href='/liver'">🫀 Liver</button>
+ <button>🧣 Thyroid</button>
+ <button onclick="location.href='/anemia'">🩹 Anemia</button>
+ <button onclick="location.href='/autism'">🧩 Autism</button>
+ <button onclick="location.href='/alzheimers'">🧠 Alzheimer’s</button>
+
+</div>
+
+<div class="main">
+
+<h1>🧣 Thyroid Prediction</h1>
+
+<div class="card">
+
+<div class="ref-title-wrapper">
+ <div></div>
+ <div></div>
+ <div class="ref-title">📊 Reference Values</div>
+</div>
+
+<div class="field">
+ <label>Age</label>
+ <input id="t1" type="number">
+ <div class="ref">0 – 100 yrs</div>
+</div>
+
+<div class="field">
+ <label>Gender (0=F, 1=M)</label>
+ <input id="t2" type="number">
+ <div class="ref">0 / 1</div>
+</div>
+
+<div class="field">
+ <label>Pregnancy (0/1)</label>
+ <input id="t3" type="number">
+ <div class="ref">0 / 1</div>
+</div>
+
+<div class="field">
+ <label>Family History</label>
+ <input id="t4" type="number">
+ <div class="ref">0 / 1</div>
+</div>
+
+<div class="field">
+ <label>Goiter</label>
+ <input id="t5" type="number">
+ <div class="ref">0 / 1</div>
+</div>
+
+<div class="field">
+ <label>Fatigue</label>
+ <input id="t6" type="number">
+ <div class="ref">0 / 1</div>
+</div>
+
+<div class="field">
+ <label>Weight Change</label>
+ <input id="t7" type="number">
+ <div class="ref">0 / 1</div>
+</div>
+
+<div class="field">
+ <label>Hair Loss</label>
+ <input id="t8" type="number">
+ <div class="ref">0 / 1</div>
+</div>
+
+<div class="field">
+ <label>Heart Rate Changes</label>
+ <input id="t9" type="number">
+ <div class="ref">0 / 1</div>
+</div>
+
+<div class="field">
+ <label>Cold/Heat Sensitivity</label>
+ <input id="t10" type="number">
+ <div class="ref">0 / 1</div>
+</div>
+
+<div class="field">
+ <label>Increased Sweating</label>
+ <input id="t11" type="number">
+ <div class="ref">0 / 1</div>
+</div>
+
+<div class="field">
+ <label>Muscle Weakness</label>
+ <input id="t12" type="number">
+ <div class="ref">0 / 1</div>
+</div>
+
+<div class="field">
+ <label>Constipation/Bowel Issues</label>
+ <input id="t13" type="number">
+ <div class="ref">0 / 1</div>
+</div>
+
+<div class="field">
+ <label>Depression/Anxiety</label>
+ <input id="t14" type="number">
+ <div class="ref">0 / 1</div>
+</div>
+
+<div class="field">
+ <label>Memory Problems</label>
+ <input id="t15" type="number">
+ <div class="ref">0 / 1</div>
+</div>
+
+<div class="field">
+ <label>Dry/Itchy Skin</label>
+ <input id="t16" type="number">
+ <div class="ref">0 / 1</div>
+</div>
+
+<button class="check-btn" onclick="checkThyroid()">
+ Check
+</button>
+
+<div id="result" class="result-box"></div>
+
+<a href="https://my.clevelandclinic.org/health/diseases/8541-thyroid-disease" class="know" target="_blank">
+ ℹ️ Know More →
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+async function post(url,data){
+
+ let r = await fetch(url,{
+  method:"POST",
+  headers:{
+   "Content-Type":"application/json"
+  },
+  body:JSON.stringify({features:data})
+ });
+
+ return await r.json();
+}
+
+async function checkThyroid(){
+
+ let values = [
+
+  t1.value, t2.value, t3.value, t4.value,
+  t5.value, t6.value, t7.value, t8.value,
+  t9.value, t10.value, t11.value, t12.value,
+  t13.value, t14.value, t15.value, t16.value
+
+ ];
+
+ let res = document.getElementById("result");
+ let blankCount = values.filter(x=>x=="").length;
+
+ if(blankCount>4){
+  res.innerText = "Please fill the values";
+  res.style.color = "red";
+  return;
+ }
+
+ let t = values.map(x=>x==""?0:Number(x));
+ res.innerText = "Checking...";
+
+ let r = await post("/predict/thyroid", t);
+
+ if(r.result==1){
+  res.innerText="⚠️ High Risk of Thyroid Disease";
+  res.style.color="red";
+ }
+ else{
+  res.innerText="✅ Low Risk of Thyroid Disease";
+  res.style.color="green";
+ }
+
+}
+
+</script>
+
+</body>
+</html>

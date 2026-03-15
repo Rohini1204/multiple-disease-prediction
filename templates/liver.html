@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+ <title>Liver Disease Prediction</title>
+
+ <link rel="icon" type="image/png"
+      href="{{ url_for('static', filename='favicon.png') }}">
+
+ <link rel="stylesheet"
+  href="{{ url_for('static', filename='common.css') }}">
+
+ <link rel="stylesheet"
+  href="{{ url_for('static', filename='liver.css') }}">
+
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="sidebar">
+
+ <h2>🩺 Healthcare AI</h2>
+
+ <button onclick="location.href='/'">🏠 Home</button>
+ <button onclick="location.href='/diabetes'">🩸 Diabetes</button>
+ <button onclick="location.href='/heart'">❤️ Heart</button>
+ <button onclick="location.href='/parkinsons'">🧠 Parkinson’s</button>
+ <button onclick="location.href='/PCOS'">🌸 PCOS</button>
+ <button onclick="location.href='/kidney'">🧪 Kidney</button>
+ <button>🫀 Liver</button>
+ <button onclick="location.href='/thyroid'">🧣 Thyroid</button>
+ <button onclick="location.href='/anemia'">🩹 Anemia</button>
+ <button onclick="location.href='/autism'">🧩 Autism</button>
+ <button onclick="location.href='/alzheimers'">🧠 Alzheimer’s</button>
+
+</div>
+
+<div class="main">
+
+<h1>🫀 Liver Disease Prediction</h1>
+
+<div class="card">
+
+<div class="ref-title-wrapper">
+ <div></div>
+ <div></div>
+ <div class="ref-title">📊 Reference Values</div>
+</div>
+
+<div class="field">
+ <label>Age</label>
+ <input id="l1" type="number">
+ <div class="ref">18 – 80 yrs</div>
+</div>
+
+<div class="field">
+ <label>Gender (0=F, 1=M)</label>
+ <input id="l2" type="number">
+ <div class="ref">0 / 1</div>
+</div>
+
+<div class="field">
+ <label>BMI</label>
+ <input id="l3" type="number" step="0.1">
+ <div class="ref">18.5 – 24.9</div>
+</div>
+
+<div class="field">
+ <label>Alcohol Consumption</label>
+ <input id="l4" type="number">
+ <div class="ref">0 – 5</div>
+</div>
+
+<div class="field">
+ <label>Smoking (0/1)</label>
+ <input id="l5" type="number">
+ <div class="ref">0 / 1</div>
+</div>
+
+<div class="field">
+ <label>Genetic Risk (0/1)</label>
+ <input id="l6" type="number">
+ <div class="ref">0 / 1</div>
+</div>
+
+<div class="field">
+ <label>Physical Activity</label>
+ <input id="l7" type="number">
+ <div class="ref">0 – 10</div>
+</div>
+
+<div class="field">
+ <label>Diabetes (0/1)</label>
+ <input id="l8" type="number">
+ <div class="ref">0 / 1</div>
+</div>
+
+<div class="field">
+ <label>Hypertension (0/1)</label>
+ <input id="l9" type="number">
+ <div class="ref">0 / 1</div>
+</div>
+
+<div class="field">
+ <label>Liver Function Test</label>
+ <input id="l10" type="number">
+ <div class="ref">7 – 56 U/L</div>
+</div>
+
+<button class="check-btn" onclick="checkLiver()">
+ Check
+</button>
+
+<div id="result" class="result-box"></div>
+
+<a href="https://my.clevelandclinic.org/health/diseases/17179-liver-disease" class="know" target="_blank">
+ ℹ️ Know More →
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+async function post(url,data){
+
+ let r = await fetch(url,{
+  method:"POST",
+  headers:{
+   "Content-Type":"application/json"
+  },
+  body:JSON.stringify({features:data})
+ });
+
+ return await r.json();
+}
+
+async function checkLiver(){
+
+ let values = [
+  l1.value,l2.value,l3.value,l4.value,l5.value,
+  l6.value,l7.value,l8.value,l9.value,l10.value
+ ];
+
+ let res = document.getElementById("result");
+ let blankCount = values.filter(x=>x=="").length;
+
+ if(blankCount>4){
+  res.innerText = "Please fill the values";
+  res.style.color = "red";
+  return;
+ }
+
+ let l = values.map(x=>x==""?0:Number(x));
+ res.innerText = "Checking...";
+
+ let r = await post("/predict/liver", l);
+
+ if(r.result==1){
+  res.innerText="⚠️ High Risk of Liver Disease";
+  res.style.color="red";
+ }
+ else{
+  res.innerText="✅ Low Risk of Liver Disease";
+  res.style.color="green";
+ }
+
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+ <title>Alzheimer’s Prediction</title>
+
+ <link rel="icon" type="image/png"
+      href="{{ url_for('static', filename='favicon.png') }}">
+
+
+ <link rel="stylesheet"
+  href="{{ url_for('static', filename='common.css') }}">
+
+ <link rel="stylesheet"
+  href="{{ url_for('static', filename='alzheimers.css') }}">
+
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="sidebar">
+
+ <h2>🩺 Healthcare AI</h2>
+
+ <button onclick="location.href='/'">🏠 Home</button>
+ <button onclick="location.href='/diabetes'">🩸 Diabetes</button>
+ <button onclick="location.href='/heart'">❤️ Heart</button>
+ <button onclick="location.href='/parkinsons'">🧠 Parkinson’s</button>
+ <button onclick="location.href='/PCOS'">🌸 PCOS</button>
+ <button onclick="location.href='/kidney'">🧪 Kidney</button>
+ <button onclick="location.href='/liver'">🫀 Liver</button>
+ <button onclick="location.href='/thyroid'">🧣 Thyroid</button>
+ <button onclick="location.href='/anemia'">🩹 Anemia</button>
+ <button onclick="location.href='/autism'">🧩 Autism</button>
+ <button>🧠 Alzheimer’s</button>
+
+</div>
+
+<div class="main">
+
+<h1>🧠 Alzheimer’s Prediction</h1>
+
+<div class="card">
+
+<div class="ref-title-wrapper">
+ <div></div>
+ <div></div>
+ <div class="ref-title">📊 Reference Values</div>
+</div>
+
+<div class="field">
+ <label>Age</label>
+ <input id="z1" type="number">
+ <div class="ref">50 – 90 yrs</div>
+</div>
+
+<div class="field">
+ <label>Gender (0=F, 1=M)</label>
+ <input id="z2" type="number">
+ <div class="ref">0 / 1</div>
+</div>
+
+<div class="field">
+ <label>Education (Years)</label>
+ <input id="z3" type="number">
+ <div class="ref">8 – 20 yrs</div>
+</div>
+
+<div class="field">
+ <label>Ethnicity (Code)</label>
+ <input id="z4" type="number">
+ <div class="ref">0 – 5</div>
+</div>
+
+<div class="field">
+ <label>Race (Code)</label>
+ <input id="z5" type="number">
+ <div class="ref">0 – 5</div>
+</div>
+
+<div class="field">
+ <label>APOE4 (0/1)</label>
+ <input id="z6" type="number">
+ <div class="ref">0 / 1</div>
+</div>
+
+<div class="field">
+ <label>MMSE Score</label>
+ <input id="z7" type="number">
+ <div class="ref">0 – 30</div>
+</div>
+
+<div class="field">
+ <label>Imputed Genotype</label>
+ <input id="z8" type="number">
+ <div class="ref">0 / 1</div>
+</div>
+
+<div class="field">
+ <label>APOE Genotype</label>
+ <input id="z9" type="number">
+ <div class="ref">0 – 3</div>
+</div>
+
+<button class="check-btn" onclick="checkAlzheimers()">
+ Check
+</button>
+
+<div id="result" class="result-box"></div>
+
+<a href="https://my.clevelandclinic.org/health/diseases/9164-alzheimers-disease" class="know" target="_blank">
+ ℹ️ Know More →
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+async function post(url,data){
+
+ let r = await fetch(url,{
+  method:"POST",
+  headers:{
+   "Content-Type":"application/json"
+  },
+  body:JSON.stringify({features:data})
+ });
+
+ return await r.json();
+}
+
+async function checkAlzheimers(){
+
+ let values = [
+  z1.value,
+  z2.value,
+  z3.value,
+  z4.value,
+  z5.value,
+  z6.value,
+  z7.value,
+  z8.value,
+  z9.value
+ ];
+
+ let res = document.getElementById("result");
+ let blankCount = values.filter(x=>x=="").length;
+
+ if(blankCount>4){
+  res.innerText = "Please fill the values";
+  res.style.color = "red";
+  return;
+ }
+
+ let z = values.map(x=>x==""?0:Number(x));
+ res.innerText = "Checking...";
+
+
+ let r = await post("/predict/alzheimers", z);
+
+
+ if(r.result==1){
+  res.innerText="⚠️ High Risk of Alzheimer’s Disease";
+  res.style.color="red";
+ }
+ else{
+  res.innerText="✅ Low Risk of Alzheimer’s Disease";
+  res.style.color="green";
+ }
+
+}
+
+</script>
+
+</body>
+</html>

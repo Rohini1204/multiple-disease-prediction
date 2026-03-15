@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+ <title>Autism Prediction</title>
+ <link rel="icon" type="image/png"
+      href="{{ url_for('static', filename='favicon.png') }}">
+
+ <link rel="stylesheet"
+  href="{{ url_for('static', filename='common.css') }}">
+
+ <link rel="stylesheet"
+  href="{{ url_for('static', filename='autism.css') }}">
+
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="sidebar">
+
+ <h2>🩺 Healthcare AI</h2>
+
+ <button onclick="location.href='/'">🏠 Home</button>
+ <button onclick="location.href='/diabetes'">🩸 Diabetes</button>
+ <button onclick="location.href='/heart'">❤️ Heart</button>
+ <button onclick="location.href='/parkinsons'">🧠 Parkinson’s</button>
+ <button onclick="location.href='/PCOS'">🌸 PCOS</button>
+ <button onclick="location.href='/kidney'">🧪 Kidney</button>
+ <button onclick="location.href='/liver'">🫀 Liver</button>
+ <button onclick="location.href='/thyroid'">🧣 Thyroid</button>
+ <button onclick="location.href='/anemia'">🩹 Anemia</button>
+ <button>🧩 Autism</button>
+ <button onclick="location.href='/alzheimers'">🧠 Alzheimer’s</button>
+
+</div>
+
+<div class="main">
+
+<h1>🧩 Autism Prediction</h1>
+
+<div class="card">
+
+<div class="ref-title-wrapper">
+ <div></div>
+ <div></div>
+ <div class="ref-title">📊 Reference Values</div>
+</div>
+
+<div class="field">
+ <label>A1 Score</label>
+ <input id="a1" type="number">
+ <div class="ref">0 – 1</div>
+</div>
+
+<div class="field">
+ <label>A2 Score</label>
+ <input id="a2" type="number">
+ <div class="ref">0 – 1</div>
+</div>
+
+<div class="field">
+ <label>A3 Score</label>
+ <input id="a3" type="number">
+ <div class="ref">0 – 1</div>
+</div>
+
+<div class="field">
+ <label>A4 Score</label>
+ <input id="a4" type="number">
+ <div class="ref">0 – 1</div>
+</div>
+
+<div class="field">
+ <label>A5 Score</label>
+ <input id="a5" type="number">
+ <div class="ref">0 – 1</div>
+</div>
+
+<div class="field">
+ <label>A6 Score</label>
+ <input id="a6" type="number">
+ <div class="ref">0 – 1</div>
+</div>
+
+<div class="field">
+ <label>A7 Score</label>
+ <input id="a7" type="number">
+ <div class="ref">0 – 1</div>
+</div>
+
+<div class="field">
+ <label>A8 Score</label>
+ <input id="a8" type="number">
+ <div class="ref">0 – 1</div>
+</div>
+
+<div class="field">
+ <label>A9 Score</label>
+ <input id="a9" type="number">
+ <div class="ref">0 – 1</div>
+</div>
+
+<div class="field">
+ <label>A10 Score</label>
+ <input id="a10" type="number">
+ <div class="ref">0 – 1</div>
+</div>
+
+<div class="field">
+ <label>Age</label>
+ <input id="age" type="number">
+ <div class="ref">1 – 80 yrs</div>
+</div>
+
+<div class="field">
+ <label>Gender (0=F,1=M)</label>
+ <input id="gender" type="number">
+ <div class="ref">0 / 1</div>
+</div>
+
+<div class="field">
+ <label>Ethnicity (Code)</label>
+ <input id="eth" type="number">
+ <div class="ref">0 – 10</div>
+</div>
+
+<div class="field">
+ <label>Jaundice (0/1)</label>
+ <input id="jaundice" type="number">
+ <div class="ref">0 / 1</div>
+</div>
+
+<div class="field">
+ <label>Family History (0/1)</label>
+ <input id="fam" type="number">
+ <div class="ref">0 / 1</div>
+</div>
+
+<div class="field">
+ <label>Used App Before (0/1)</label>
+ <input id="app" type="number">
+ <div class="ref">0 / 1</div>
+</div>
+
+<div class="field">
+ <label>Relation (Code)</label>
+ <input id="rel" type="number">
+ <div class="ref">0 – 5</div>
+</div>
+
+<button class="check-btn" onclick="checkAutism()">
+ Check
+</button>
+
+<div id="result" class="result-box"></div>
+
+<a href="https://www.cdc.gov/ncbddd/autism/index.html"
+   class="know"
+   target="_blank">
+
+ ℹ️ Know More →
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+async function post(url,data){
+
+ let r = await fetch(url,{
+  method:"POST",
+  headers:{
+   "Content-Type":"application/json"
+  },
+  body:JSON.stringify({features:data})
+ });
+
+ return await r.json();
+}
+
+async function checkAutism(){
+
+ let values = [
+
+  a1.value,a2.value,a3.value,a4.value,a5.value,
+  a6.value,a7.value,a8.value,a9.value,a10.value,
+
+  age.value,
+  gender.value,
+  eth.value,
+  jaundice.value,
+  fam.value,
+  app.value,
+  rel.value
+
+ ];
+
+ let res = document.getElementById("result");
+ let blankCount = values.filter(x=>x=="").length;
+
+ if(blankCount>4){
+  res.innerText = "Please fill the values";
+  res.style.color = "red";
+  return;
+ }
+
+ let a = values.map(x=>x==""?0:Number(x));
+ res.innerText = "Checking...";
+
+ let r = await post("/predict/autism",a);
+
+ if(r.result==1){
+  res.innerText="⚠️ High Risk of Autism";
+  res.style.color="red";
+ }
+ else{
+  res.innerText="✅ Low Risk of Autism";
+  res.style.color="green";
+ }
+
+}
+
+</script>
+
+</body>
+</html>

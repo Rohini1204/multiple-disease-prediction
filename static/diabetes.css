@@ -1,0 +1,126 @@
+/* Title */
+
+h1{
+ color:#0b2545;
+ margin-bottom:20px;
+}
+
+/* Reference Header */
+
+.ref-title-wrapper{
+ display:grid;
+ grid-template-columns:1.4fr 1fr 1.2fr;
+ margin-bottom:12px;
+}
+
+.ref-title{
+ font-weight:600;
+ color:#0b2545;
+}
+
+/* Fields */
+
+.field{
+ display:grid;
+ grid-template-columns:1.4fr 1fr 1.2fr;
+ align-items:center;
+ gap:15px;
+ margin:12px 0;
+}
+
+.field label{
+ font-size:15px;
+ font-weight:500;
+ color:#222;
+}
+
+.field input{
+ width:100%;
+ padding:9px;
+ border-radius:6px;
+ border:1px solid #ccc;
+ font-size:14px;
+ text-align:center;
+}
+
+.field input:focus{
+ outline:none;
+ border-color:#0b2545;
+}
+
+.ref{
+ font-size:13px;
+ color:#555;
+ white-space:nowrap;
+}
+
+/* Button */
+
+.check-btn{
+ width:100%;
+ padding:12px;
+ background:#0b2545;
+ color:white;
+ border:none;
+ border-radius:8px;
+ margin-top:20px;
+ font-size:16px;
+ cursor:pointer;
+}
+
+.check-btn:hover{
+ background:#143d6b;
+}
+
+/* Result Box */
+
+.result-box{
+ margin-top:15px;
+ text-align:center;
+ font-size:17px;
+ font-weight:600;
+ min-height:25px;
+ color:#222;
+}
+
+/* Know More */
+
+/* .know{
+ margin-top:15px;
+ padding:12px;
+ background:#ffe5d0;
+ border-radius:8px;
+ text-align:center;
+ cursor:pointer;
+} */
+
+ /* .know{
+    display:block;
+    text-decoration:none;
+}
+.know:hover{
+ background:#ffd1a8;
+} */
+ .know{
+    margin-top:15px;
+    padding:12px;
+
+    background:#ffe5d0;
+    border-radius:8px;
+
+    text-align:center;
+
+    cursor:pointer;
+
+    font-size:14px;
+    color:#333;
+
+    text-decoration:none;   /* removes underline */
+    display:block;         /* makes it box-like */
+
+    transition:0.2s;
+}
+
+.know:hover{
+    background:#ffd1a8;
+}

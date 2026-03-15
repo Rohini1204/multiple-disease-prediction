@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="home-title">🏥 Healthcare AI Dashboard</h1>
+
+<p class="home-subtitle">
+ Select a disease module to start prediction
+</p>
+
+<div class="dashboard">
+
+    <a href="/diabetes" class="dash-card">
+        🩸
+        <h3>Diabetes</h3>
+    </a>
+
+    <a href="/heart" class="dash-card">
+        ❤️
+        <h3>Heart</h3>
+    </a>
+
+    <a href="/parkinsons" class="dash-card">
+        🧠
+        <h3>Parkinson’s</h3>
+    </a>
+
+    <a href="/PCOS" class="dash-card">
+        🌸
+        <h3>PCOS</h3>
+    </a>
+
+    <a href="/kidney" class="dash-card">
+        🧪
+        <h3>Kidney</h3>
+    </a>
+
+    <a href="/liver" class="dash-card">
+        🫀
+        <h3>Liver</h3>
+    </a>
+
+    <a href="/thyroid" class="dash-card">
+        🧣
+        <h3>Thyroid</h3>
+    </a>
+
+    <a href="/anemia" class="dash-card">
+        🩹
+        <h3>Anemia</h3>
+    </a>
+
+    <a href="/autism" class="dash-card">
+        🧩
+        <h3>Autism</h3>
+    </a>
+
+    <a href="/alzheimers" class="dash-card">
+        🧠
+        <h3>Alzheimer’s</h3>
+    </a>
+
+</div>
+<br>
+<br>
+<p>Note: This is not a medical report, it is an analysis</p>
+
+{% endblock %}

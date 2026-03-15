@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+ <title>Diabetes Prediction</title>
+
+ <link rel="icon" type="image/png"
+      href="{{ url_for('static', filename='favicon.png') }}">
+
+ <link rel="stylesheet"
+  href="{{ url_for('static', filename='common.css') }}">
+
+ <link rel="stylesheet"
+  href="{{ url_for('static', filename='diabetes.css') }}">
+
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="sidebar">
+
+ <h2>🩺 Healthcare AI</h2>
+
+ <button onclick="location.href='/'">🏠 Home</button>
+ <button>🩸 Diabetes</button>
+ <button onclick="location.href='/heart'">❤️ Heart</button>
+ <button onclick="location.href='/parkinsons'">🧠 Parkinson’s</button>
+ <button onclick="location.href='/PCOS'">🌸 PCOS</button>
+ <button onclick="location.href='/kidney'">🧪 Kidney</button>
+ <button onclick="location.href='/liver'">🫀 Liver</button>
+ <button onclick="location.href='/thyroid'">🧣 Thyroid</button>
+ <button onclick="location.href='/anemia'">🩹 Anemia</button>
+ <button onclick="location.href='/autism'">🧩 Autism</button>
+ <button onclick="location.href='/alzheimers'">🧠 Alzheimer’s</button>
+ 
+</div>
+
+<div class="main">
+
+<h1>🩸 Diabetes Prediction</h1>
+
+<div class="card">
+
+<div class="ref-title-wrapper">
+ <div></div>
+ <div></div>
+ <div class="ref-title">📊 Reference Values</div>
+</div>
+
+<div class="field">
+ <label>Pregnancies</label>
+ <input id="d1" type="number">
+ <div class="ref">0 – 10</div>
+</div>
+
+<div class="field">
+ <label>Glucose Level</label>
+ <input id="d2" type="number">
+ <div class="ref">70 – 140 mg/dL</div>
+</div>
+
+<div class="field">
+ <label>Blood Pressure</label>
+ <input id="d3" type="number">
+ <div class="ref">60 – 90 mmHg</div>
+</div>
+
+<div class="field">
+ <label>Skin Thickness(Optional)</label>
+ <input id="d4" type="number">
+ <div class="ref">10 – 50 mm</div>
+</div>
+
+<div class="field">
+ <label>Insulin</label>
+ <input id="d5" type="number">
+ <div class="ref">16 – 166 μU/mL</div>
+</div>
+
+<div class="field">
+ <label>BMI</label>
+ <input id="d6" type="number" step="0.1">
+ <div class="ref">18.5 – 24.9</div>
+</div>
+
+<div class="field">
+ <label>DPF</label>
+ <input id="d7" type="number" step="0.01">
+ <div class="ref">0.1 – 1.0</div>
+</div>
+
+<div class="field">
+ <label>Age</label>
+ <input id="d8" type="number">
+ <div class="ref">18 – 80 yrs</div>
+</div>
+
+<button class="check-btn" onclick="checkDiabetes()">
+ Check
+</button>
+
+<div id="result" class="result-box"></div>
+
+<!-- <div class="know">
+ ℹ️ Know More →
+</div> -->
+<a href="https://my.clevelandclinic.org/health/diseases/7104-diabetes" class="know" target="_blank">
+ ℹ️ Know More →
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+async function post(url,data){
+
+ let r = await fetch(url,{
+  method:"POST",
+  headers:{
+   "Content-Type":"application/json"
+  },
+  body:JSON.stringify({features:data})
+ });
+
+ return await r.json();
+}
+
+async function checkDiabetes(){
+
+ let values = [
+  d1.value,d2.value,d3.value,d4.value,
+  d5.value,d6.value,d7.value,d8.value
+ ];
+
+
+ let res = document.getElementById("result");
+ let blankCount = values.filter(x=>x=="").length;
+
+ if(blankCount>4){
+  res.innerText = "Please fill the values";
+  res.style.color = "red";
+  return;
+ }
+
+ let d = values.map(x=>x==""?0:Number(x));
+ res.innerText = "Checking...";
+
+ let r = await post("/predict/diabetes",d);
+
+ if(r.result==1){
+  res.innerText="⚠️ High Risk of Diabetes";
+  res.style.color="red";
+ }
+ else{
+  res.innerText="✅ Low Risk of Diabetes";
+  res.style.color="green";
+ }
+
+}
+
+</script>
+
+</body>
+</html>

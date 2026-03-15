@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+ <title>Kidney Disease Prediction</title>
+
+ <link rel="icon" type="image/png"
+      href="{{ url_for('static', filename='favicon.png') }}">
+
+ <link rel="stylesheet"
+  href="{{ url_for('static', filename='common.css') }}">
+
+ <link rel="stylesheet"
+  href="{{ url_for('static', filename='kidney.css') }}">
+
+</head>
+
+<body>
+
+<div class="app">
+<div class="sidebar">
+
+ <h2>🩺 Healthcare AI</h2>
+
+ <button onclick="location.href='/'">🏠 Home</button>
+ <button onclick="location.href='/diabetes'">🩸 Diabetes</button>
+ <button onclick="location.href='/heart'">❤️ Heart</button>
+ <button onclick="location.href='/parkinsons'">🧠 Parkinson’s</button>
+ <button onclick="location.href='/PCOS'">🌸 PCOS</button>
+ <button>🧪 Kidney</button>
+ <button onclick="location.href='/liver'">🫀 Liver</button>
+ <button onclick="location.href='/thyroid'">🧣 Thyroid</button>
+ <button onclick="location.href='/anemia'">🩹 Anemia</button>
+ <button onclick="location.href='/autism'">🧩 Autism</button>
+ <button onclick="location.href='/alzheimers'">🧠 Alzheimer’s</button>
+
+</div>
+
+<div class="main">
+
+<h1>🧪 Kidney Disease Prediction</h1>
+
+<div class="card">
+
+<div class="ref-title-wrapper">
+ <div></div>
+ <div></div>
+ <div class="ref-title">📊 Reference Values</div>
+</div>
+
+<div class="field"><label>Age</label>
+ <input id="k1" type="number">
+ <div class="ref">18 – 80 yrs</div></div>
+
+<div class="field"><label>Blood Pressure</label>
+ <input id="k2" type="number">
+ <div class="ref">80 – 120 mmHg</div></div>
+
+<div class="field"><label>Specific Gravity</label>
+ <input id="k3" type="number" step="0.001">
+ <div class="ref">1.005 – 1.025</div></div>
+
+<div class="field"><label>Albumin</label>
+ <input id="k4" type="number">
+ <div class="ref">0 – 5</div></div>
+
+<div class="field"><label>Sugar</label>
+ <input id="k5" type="number">
+ <div class="ref">0 – 5</div></div>
+
+<div class="field"><label>Red Blood Cells</label>
+ <input id="k6" type="number">
+ <div class="ref">0/1</div></div>
+
+<div class="field"><label>Pus Cell</label>
+ <input id="k7" type="number">
+ <div class="ref">0/1</div></div>
+
+<div class="field"><label>Pus Cell Clumps</label>
+ <input id="k8" type="number">
+ <div class="ref">0/1</div></div>
+
+<div class="field"><label>Bacteria</label>
+ <input id="k9" type="number">
+ <div class="ref">0/1</div></div>
+
+<div class="field"><label>Random Blood Glucose</label>
+ <input id="k10" type="number">
+ <div class="ref">70 – 140</div></div>
+
+<div class="field"><label>Blood Urea</label>
+ <input id="k11" type="number">
+ <div class="ref">7 – 20 mg/dL</div></div>
+
+<div class="field"><label>Serum Creatinine</label>
+ <input id="k12" type="number" step="0.1">
+ <div class="ref">0.6 – 1.3</div></div>
+
+<div class="field"><label>Sodium</label>
+ <input id="k13" type="number">
+ <div class="ref">135 – 145</div></div>
+
+<div class="field"><label>Potassium</label>
+ <input id="k14" type="number" step="0.1">
+ <div class="ref">3.5 – 5.0</div></div>
+
+<div class="field"><label>Hemoglobin</label>
+ <input id="k15" type="number" step="0.1">
+ <div class="ref">12 – 17 g/dL</div></div>
+
+<div class="field"><label>Packed Cell Volume</label>
+ <input id="k16" type="number">
+ <div class="ref">36 – 48 %</div></div>
+
+<div class="field"><label>WBC Count</label>
+ <input id="k17" type="number">
+ <div class="ref">4000 – 11000</div></div>
+
+<div class="field"><label>RBC Count</label>
+ <input id="k18" type="number" step="0.1">
+ <div class="ref">4.5 – 5.9</div></div>
+
+<div class="field"><label>Hypertension</label>
+ <input id="k19" type="number">
+ <div class="ref">0/1</div></div>
+
+<div class="field"><label>Diabetes Mellitus</label>
+ <input id="k20" type="number">
+ <div class="ref">0/1</div></div>
+
+<div class="field"><label>Coronary Disease</label>
+ <input id="k21" type="number">
+ <div class="ref">0/1</div></div>
+
+<div class="field"><label>Appetite</label>
+ <input id="k22" type="number">
+ <div class="ref">0/1</div></div>
+
+<div class="field"><label>Pedal Edema</label>
+ <input id="k23" type="number">
+ <div class="ref">0/1</div></div>
+
+<div class="field"><label>Anemia</label>
+ <input id="k24" type="number">
+ <div class="ref">0/1</div></div>
+
+
+<button class="check-btn" onclick="checkKidney()">
+ Check
+</button>
+
+<div id="result" class="result-box"></div>
+
+<a href="https://my.clevelandclinic.org/health/diseases/15096-chronic-kidney-disease" class="know" target="_blank">
+ ℹ️ Know More →
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+async function post(url,data){
+
+ let r = await fetch(url,{
+  method:"POST",
+  headers:{
+   "Content-Type":"application/json"
+  },
+  body:JSON.stringify({features:data})
+ });
+
+ return await r.json();
+}
+
+async function checkKidney(){
+
+ let values = [
+  k1.value,k2.value,k3.value,k4.value,k5.value,
+  k6.value,k7.value,k8.value,k9.value,k10.value,
+  k11.value,k12.value,k13.value,k14.value,k15.value,
+  k16.value,k17.value,k18.value,k19.value,k20.value,
+  k21.value,k22.value,k23.value,k24.value
+ ];
+
+ let res = document.getElementById("result");
+ let blankCount = values.filter(x=>x=="").length;
+
+ if(blankCount>4){
+  res.innerText="Please fill the values";
+  res.style.color="red";
+  return;
+ }
+
+ let d = values.map(x=>x==""?0:Number(x));
+ res.innerText="Checking...";
+
+ let r = await post("/predict/kidney",d);
+
+ if(r.result==1){
+  res.innerText="⚠️ High Risk of Kidney Disease";
+  res.style.color="red";
+ }
+ else{
+  res.innerText="✅ Low Risk of Kidney Disease";
+  res.style.color="green";
+ }
+
+}
+
+</script>
+
+</body>
+</html>

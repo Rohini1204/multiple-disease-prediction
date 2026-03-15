@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Healthcare AI</title>
+
+    <link rel="icon" type="image/png"
+      href="{{ url_for('static', filename='favicon.png') }}">
+
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='common.css') }}">
+</head>
+
+<body>
+
+<!-- MAIN ONLY -->
+
+<div class="main-full">
+
+    {% block content %}
+    {% endblock %}
+
+</div>
+
+</body>
+</html>

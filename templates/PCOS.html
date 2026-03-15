@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+ <title>PCOS Prediction</title>
+
+ <link rel="icon" type="image/png"
+      href="{{ url_for('static', filename='favicon.png') }}">
+
+ <link rel="stylesheet"
+  href="{{ url_for('static', filename='common.css') }}">
+
+ <link rel="stylesheet"
+  href="{{ url_for('static', filename='pcos.css') }}">
+
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="sidebar">
+
+ <h2>🩺 Healthcare AI</h2>
+
+ <button onclick="location.href='/'">🏠 Home</button>
+ <button onclick="location.href='/diabetes'">🩸 Diabetes</button>
+ <button onclick="location.href='/heart'">❤️ Heart</button>
+ <button onclick="location.href='/parkinsons'">🧠 Parkinson’s</button>
+ <button>🌸 PCOS</button>
+ <button onclick="location.href='/kidney'">🧪 Kidney</button>
+ <button onclick="location.href='/liver'">🫀 Liver</button>
+ <button onclick="location.href='/thyroid'">🧣 Thyroid</button>
+ <button onclick="location.href='/anemia'">🩹 Anemia</button>
+ <button onclick="location.href='/autism'">🧩 Autism</button>
+ <button onclick="location.href='/alzheimers'">🧠 Alzheimer’s</button>
+
+</div>
+
+<div class="main">
+
+<h1>🌸 PCOS Prediction</h1>
+
+<div class="card">
+
+<div class="ref-title-wrapper">
+ <div></div>
+ <div></div>
+ <div class="ref-title">📊 Reference Values</div>
+</div>
+
+<div class="field">
+ <label>Age</label>
+ <input id="p1" type="number">
+ <div class="ref">15 – 45 yrs</div>
+</div>
+
+<div class="field">
+ <label>BMI</label>
+ <input id="p2" type="number" step="0.1">
+ <div class="ref">18.5 – 24.9</div>
+</div>
+
+<div class="field">
+ <label>Menstrual Irregularity</label>
+ <input id="p3" type="number">
+ <div class="ref">0 = No, 1 = Yes</div>
+</div>
+
+<div class="field">
+ <label>Testosterone Level</label>
+ <input id="p4" type="number" step="0.1">
+ <div class="ref">15 – 70 ng/dL</div>
+</div>
+
+<div class="field">
+ <label>Antral Follicle Count</label>
+ <input id="p5" type="number">
+ <div class="ref">5 – 20</div>
+</div>
+
+<button class="check-btn" onclick="checkPCOS()">
+ Check
+</button>
+
+<div id="result" class="result-box"></div>
+
+<a href="https://my.clevelandclinic.org/health/diseases/8316-polycystic-ovary-syndrome-pcos" class="know" target="_blank">
+ ℹ️ Know More →
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+async function post(url,data){
+
+ let r = await fetch(url,{
+  method:"POST",
+  headers:{
+   "Content-Type":"application/json"
+  },
+  body:JSON.stringify({features:data})
+ });
+
+ return await r.json();
+}
+
+async function checkPCOS(){
+
+ let values = [
+  p1.value,
+  p2.value,
+  p3.value,
+  p4.value,
+  p5.value
+ ];
+
+
+ let res = document.getElementById("result");
+ let blankCount = values.filter(x=>x=="").length;
+
+ if(blankCount>4){
+  res.innerText = "Please fill the values";
+  res.style.color = "red";
+  return;
+ }
+
+ let d = values.map(x=>x==""?0:Number(x));
+ res.innerText = "Checking...";
+
+ let r = await post("/predict/pcos",d);
+
+ if(r.result==1){
+  res.innerText="⚠️ High Risk of PCOS";
+  res.style.color="red";
+ }
+ else{
+  res.innerText="✅ Low Risk of PCOS";
+  res.style.color="green";
+ }
+
+}
+
+</script>
+
+</body>
+</html>

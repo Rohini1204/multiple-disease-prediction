@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>Parkinson's Prediction</title>
+
+ <link rel="icon" type="image/png"
+      href="{{ url_for('static', filename='favicon.png') }}">
+
+ <link rel="stylesheet"
+  href="{{ url_for('static', filename='common.css') }}">
+
+ <link rel="stylesheet"
+  href="{{ url_for('static', filename='parkinsons.css') }}">
+</head>
+<body>
+
+<div class="app">
+
+<div class="sidebar">
+ <h2>🩺 Healthcare AI</h2>
+
+ <button onclick="location.href='/'">🏠 Home</button>
+ <button onclick="location.href='/diabetes'">🩸 Diabetes</button>
+ <button onclick="location.href='/heart'">❤️ Heart</button>
+ <button>🧠 Parkinson's</button>
+ <button onclick="location.href='/PCOS'">🌸 PCOS</button>
+ <button onclick="location.href='/kidney'">🧪 Kidney</button>
+ <button onclick="location.href='/liver'">🫀 Liver</button>
+ <button onclick="location.href='/thyroid'">🧣 Thyroid</button>
+ <button onclick="location.href='/anemia'">💊 Anemia</button>
+ <button onclick="location.href='/autism'">🧩 Autism</button>
+ <button onclick="location.href='/alzheimers'">🧠 Alzheimer's</button>
+</div>
+
+<div class="main">
+<h1>🧠 Parkinson's Prediction</h1>
+
+<div class="card">
+
+<div class="ref-title-wrapper">
+ <div></div>
+ <div></div>
+ <div class="ref-title">📊 Reference Values</div>
+</div>
+
+<div class="field"><label for="p1">Fo</label><input id="p1" type="number" step="any"><div class="ref">85-255</div></div>
+<div class="field"><label for="p2">Fhi</label><input id="p2" type="number" step="any"><div class="ref">100-600</div></div>
+<div class="field"><label for="p3">Flo</label><input id="p3" type="number" step="any"><div class="ref">60-240</div></div>
+<div class="field"><label for="p4">Jitter%</label><input id="p4" type="number" step="any"><div class="ref">&lt;1%</div></div>
+<div class="field"><label for="p5">JitterAbs</label><input id="p5" type="number" step="any"><div class="ref">&lt;0.0001</div></div>
+
+<div class="field"><label for="p6">RAP</label><input id="p6" type="number" step="any"><div class="ref">&lt;0.02</div></div>
+<div class="field"><label for="p7">PPQ</label><input id="p7" type="number" step="any"><div class="ref">&lt;0.02</div></div>
+<div class="field"><label for="p8">DDP</label><input id="p8" type="number" step="any"><div class="ref">&lt;0.06</div></div>
+
+<div class="field"><label for="p9">Shimmer</label><input id="p9" type="number" step="any"><div class="ref">&lt;3%</div></div>
+<div class="field"><label for="p10">Shimmer dB</label><input id="p10" type="number" step="any"><div class="ref">&lt;0.3</div></div>
+
+<div class="field"><label for="p11">APQ3</label><input id="p11" type="number" step="any"><div class="ref">&lt;0.02</div></div>
+<div class="field"><label for="p12">APQ5</label><input id="p12" type="number" step="any"><div class="ref">&lt;0.03</div></div>
+<div class="field"><label for="p13">APQ</label><input id="p13" type="number" step="any"><div class="ref">&lt;0.03</div></div>
+<div class="field"><label for="p14">DDA</label><input id="p14" type="number" step="any"><div class="ref">&lt;0.05</div></div>
+
+<div class="field"><label for="p15">NHR</label><input id="p15" type="number" step="any"><div class="ref">&lt;0.02</div></div>
+<div class="field"><label for="p16">HNR</label><input id="p16" type="number" step="any"><div class="ref">&gt;20</div></div>
+
+<div class="field"><label for="p17">RPDE</label><input id="p17" type="number" step="any"><div class="ref">0.3-0.6</div></div>
+<div class="field"><label for="p18">DFA</label><input id="p18" type="number" step="any"><div class="ref">0.6-0.9</div></div>
+
+<div class="field"><label for="p19">Spread1</label><input id="p19" type="number" step="any"><div class="ref">-7 to -2</div></div>
+<div class="field"><label for="p20">Spread2</label><input id="p20" type="number" step="any"><div class="ref">0.01-0.45</div></div>
+<div class="field"><label for="p21">D2</label><input id="p21" type="number" step="any"><div class="ref">2-3</div></div>
+<div class="field"><label for="p22">PPE</label><input id="p22" type="number" step="any"><div class="ref">&lt;0.2</div></div>
+
+<button class="check-btn" onclick="checkPark()">
+ Check
+</button>
+
+<div id="result" class="result-box"></div>
+
+<a href="https://my.clevelandclinic.org/health/diseases/8525-parkinsons-disease-an-overview" class="know" target="_blank">
+ Know More ->
+</a>
+
+</div>
+</div>
+</div>
+
+<script>
+async function post(url, data) {
+ let r = await fetch(url, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ features: data })
+ });
+
+ return await r.json();
+}
+
+async function checkPark() {
+ let values = [
+  p1.value, p2.value, p3.value, p4.value, p5.value,
+  p6.value, p7.value, p8.value, p9.value, p10.value,
+  p11.value, p12.value, p13.value, p14.value, p15.value,
+  p16.value, p17.value, p18.value, p19.value, p20.value,
+  p21.value, p22.value
+ ];
+
+ let res = document.getElementById("result");
+ let blankCount = values.filter(x => x === "").length;
+
+ if (blankCount > 4) {
+  res.innerText = "Please fill the values";
+  res.style.color = "red";
+  return;
+ }
+
+ let p = values.map(x => x === "" ? 0 : Number(x));
+ res.innerText = "Checking...";
+
+ let r = await post("/predict/parkinsons", p);
+
+ if (r.result == 1) {
+  res.innerText = "High Risk of Parkinson's";
+  res.style.color = "red";
+ } else {
+  res.innerText = "Low Risk of Parkinson's";
+  res.style.color = "green";
+ }
+}
+</script>
+
+</body>
+</html>
